@@ -35,7 +35,7 @@ if(__name__ == "__main__"):
         test_case = tc.test_cases()
         
         # 2. set up required parameters using functions from the test case
-        test_case.setup_equations_4(max(0.01*grid_size*h,h))
+        test_case.setup_equations_1(max(0.01*grid_size*h,h))
         phi = test_case.lvl_func(xmesh, ymesh)
         sol = test_case.sol_func(xmesh, ymesh)
         rho = test_case.rho_func(xmesh, ymesh)
