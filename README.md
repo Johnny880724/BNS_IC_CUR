@@ -45,7 +45,7 @@ test_case.setup_equations_4(max(0.01*grid_size*h,h))
 ```
 
 ## Details about the files
-1. The file `main.p`' only serves as a demo environment for the solver.
+1. The file `main.py` only serves as a demo environment for the solver.
 2. The file `jacobi_newtonian_solver.py` contains the source term method that solves the Newtonian equation.
 3. The file `mesh_helper_functions.py` contains helper function of vector calculus and level set operations for `jacobi_newtonian_solver.py`.
 4. The file `test_cases.py` contains 5 test cases for testing purposes. The current demo in `main.py` uses test case 1.
