@@ -225,7 +225,7 @@ def poisson_jacobi_solver_zero(u_init_, maxIterNum_, mesh_, source_, phi_,print_
             else:
                 u_prev = np.copy(u_cur)
             if(print_option):
-                sys.stdout.write("\rProgress: %4d out of %4d" % (i,maxIterNum_))
+                sys.stdout.write("\rJacobi Solver Progress: %4d iterations (max %4d)" % (i,maxIterNum_))
                 sys.stdout.flush()
     if(print_option):
         print("")
@@ -298,7 +298,7 @@ def coef_poisson_jacobi_source_term_Neumann_hVary(u_init_, maxMultiple_, mesh_,p
     for it in range(iteration_total):
         # print iteration process
         if(print_it):
-            print("This is iteration %d :" % (it + 1))
+            print("Source term method iteration %d :" % (it + 1))
         
         #A1-1 compute the source term
         source = get_source(-a_mesh, -b_mesh, phi, f_use, h)
@@ -367,7 +367,7 @@ if(__name__ == "__main__"):
 #    grid_size_array = [32,50,64,80,100,128,140,156,178]
     for grid_size in grid_size_array:
         setup_grid(grid_size)
-        print("grid size %d" % grid_size)
+        print("Grid size %d" % grid_size)
         
         # 1. create a test case object
         test_case = tc.test_cases()

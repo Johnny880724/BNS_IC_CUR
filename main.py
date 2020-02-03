@@ -25,8 +25,8 @@ if(__name__ == "__main__"):
     result_array = []
     
     # the array of grid sizes to be tested
-#    grid_size_array = [64]
-    grid_size_array = [32,50,64,80,100,128,140,156]
+    grid_size_array = [100]
+#    grid_size_array = [32,50,64,80,102,126,140]
     for grid_size in grid_size_array:
         u_init, (xmesh,ymesh), h = jns.setup_grid(grid_size)
         print("grid size %d" % grid_size)
@@ -35,7 +35,7 @@ if(__name__ == "__main__"):
         test_case = tc.test_cases()
         
         # 2. set up required parameters using functions from the test case
-        test_case.setup_equations_1(max(0.01*grid_size*h,h))
+        test_case.setup_equations_4(max(0.01*grid_size*h,h))
         phi = test_case.lvl_func(xmesh, ymesh)
         sol = test_case.sol_func(xmesh, ymesh)
         rho = test_case.rho_func(xmesh, ymesh)
@@ -51,6 +51,6 @@ if(__name__ == "__main__"):
         maxDif,L2Dif = mhf.get_error_N(u_result, theory , mhf.get_frame(rho))
         result_array.append(maxDif)
 
-        
-    plt.figure()
-    plt.plot(grid_size_array, extpl_array)
+    # for plotting
+#    plt.figure()
+#    plt.plot(grid_size_array, result_array)

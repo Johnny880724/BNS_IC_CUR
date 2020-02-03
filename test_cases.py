@@ -181,7 +181,7 @@ class test_cases:
     # u_n             = 4 * r**3
     # phi             = (r**2 - r0**2)/(2*r0)
     # abs_grad(phi)   = r / r0
-    # f               = 8*r**2*(-2*r0**2 + 3*r**2) / (2*r0)
+    # f               = 8*r**2*(-2*r0**2 + 3*r**2) / (2*r0) / (r/r0)
     # rhs             = 8*r**2*(-2*r0**2 + 3*r**2) / (2*r0) (assume r = r0 on the boundary)
     def setup_equations_4(self,delta_phi):
         # theoretical result u
@@ -214,9 +214,13 @@ class test_cases:
             return (mhf.XYtoR(x,y)**2 - r0**2) / (2*r0)
         self.rho_func = coef
         
+        # inverse of abs_grad(phi) 1/|grad(phi)|
+        def inv_abs_grad_phi(x,y):
+            return r0/(np.sqrt(y**2 + x**2) + mhf.singular_null)
+        
         # boundary condition
         def Neumann_boundary(x,y):
-            return rhs(x,y)
+            return rhs(x,y) * inv_abs_grad_phi(x,y)
         self.boundary_func = Neumann_boundary
         
         #set up solution for checking error
