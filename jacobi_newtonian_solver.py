@@ -32,6 +32,7 @@ def setup_grid(N_grid_val = 100):
     # solution
     global u_init
     u_init = np.zeros_like(xmesh)
+    return u_init, (xmesh,ymesh), h
 
 #discretization of Step, Delta functions
 def I(phi):
