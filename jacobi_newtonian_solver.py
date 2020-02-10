@@ -4,6 +4,16 @@ Created on Wed Jan 22 14:09:48 2020
 
 @author: Johnny Tsao
 """
+"""
+This file incorporates the source term method proposed by John Towers in his paper
+A source term method for Poisson problems on irregular domains (2018)
+https://doi.org/10.1016/j.jcp.2018.01.038
+
+There are a few notation differences.
+1. Here we use phi < 0 for the interior and phi > 0 for the exterior
+2. For the variable coefficient function we use div(rho*grad(u)) = f(grad(phi))
+"""
+
 import sys
 import mesh_helper_functions as mhf
 import test_cases as tc
@@ -33,6 +43,8 @@ def setup_grid(N_grid_val = 100):
     global u_init
     u_init = np.zeros_like(xmesh)
     return u_init, (xmesh,ymesh), h
+
+# Discretizations: source term method section 2.2
 
 #discretization of Step, Delta functions
 def I(phi):
@@ -79,7 +91,7 @@ def get_N3(phi):
     N2 = get_N2(phi)
     return get_neighbor(N2)
 
-# return the heaviside function discretized in the paper
+# return the heaviside function discretized in the paper - formula 4
 def H(phi_inv,h):
     J_mat = J(phi_inv)
     K_mat = K(phi_inv)
@@ -89,7 +101,7 @@ def H(phi_inv,h):
     second_term = mhf.D(phi_inv)
     return Chi(phi_inv) * first_term + (1-Chi(phi_inv)) * second_term
 
-# return the delta function discretized in the paper
+# return the delta function discretized in the paper -formula 4
 def delta(phi_inv,h):
     I_mat = I(phi_inv)
     J_mat = J(phi_inv)
@@ -112,7 +124,7 @@ def get_source(a, b, phi_,f_mat_, h_):
     S_mat = term1 + term2 + term3 + term4
     return S_mat
 
-#projection algorithm
+#projection algorithm - source term method section 2.3
 def projection(mesh_, phi_inv):
     xmesh, ymesh = mesh_
     h = xmesh[0,1]-xmesh[0,0]
@@ -120,11 +132,12 @@ def projection(mesh_, phi_inv):
     grad_tup = mhf.grad(phi_inv,h,h)
     nx = -grad_tup[0] / (phi_abs_grad + singular_null)
     ny = -grad_tup[1] / (phi_abs_grad + singular_null)
+    # formula 14
     xp = xmesh + nx * phi_inv / (phi_abs_grad + singular_null)
     yp = ymesh + ny * phi_inv / (phi_abs_grad + singular_null)
     return xp, yp
 
-# quadrature extrapolation algorithm
+# quadrature extrapolation algorithm - source term method section 2.4
 # (extrapolation may not work if the grid size is too small)
 def extrapolation(val_, target_, eligible_):
     val_extpl = val_ * eligible_
@@ -182,7 +195,7 @@ def interpolation(mesh, mesh_p, zmesh):
     return zmesh_p
 
 ## poisson solver function
-## the result solution is zero (making the mean of the solution 0) at every iteration
+## the result solution is subtracted by their average at every iteration
 # u_init_          : (N*N np array) initial data
 # maxIterNum_      : (scalar)       maximum iteration for Jacobi method
 # mesh_            : (duple)        (xmesh, ymesh)
