@@ -13,7 +13,8 @@ import matplotlib.pyplot as plt
 #################### Newtonian equation ##########################
 # coefficient Poisson equation:   div ( rho * grad(u)) = f * |grad(rho)|
 # Neumann boundary condition:     u_n = f
-# Level set:                      phi = rho + dh
+# Level set:                      phi = rho + dh 
+# (the level set can be any function satisfying phi = 0 + dh on the boundary)
 
 class test_cases:
     # desired_func:    u
@@ -206,6 +207,7 @@ class test_cases:
         
         # level set function
         def level(x,y):
+#            return coef(x,y) + delta_phi
             return coef(x,y) + delta_phi
         self.lvl_func = level
         
